@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="userer" style="position: absolute;top: 18%;height: 600px; border: 5px">
+	<div class="help-l fl" style="border: 1px solid #ddd; height: 600px" >
+			<div class="help-item">
+				<div class="help-item-title">个人中心
+					<a href="javascript:void(0)" class="abs"></a>
+				</div>
+				<div class="help-item-list">
+					<ul>
+						<li><a th:href="@{'/user/user-show?user_id='+${session.LogUser.user_id}}">个人信息</a></li>
+						<li><a href="/user/password">修改密码</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="help-item">
+				<div class="help-item-title">车位管理
+					<a href="javascript:void(0)" class="abs"></a>
+				</div>
+				<div class="help-item-list">
+					<ul>
+						<li><a th:href="@{/order/showOrder}">我的订单</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="help-item">
+				<div class="help-item-title">留言管理
+					<a href="javascript:void(0)" class="abs"></a>
+				</div>
+				<div class="help-item-list">
+					<ul>
+						<li><a th:href="@{'/message/myMessage?id='+${session.LogUser.user_id}}">我的留言</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+</div>
+</html>

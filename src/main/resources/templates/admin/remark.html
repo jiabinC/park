@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/moban/css/layui.css}"/>
+    <title>Title</title>
+</head>
+
+<body>
+<br>
+<div>
+    <div style="position: absolute;top: 35px;padding-left: 20px">管理员回复：</div>
+    <div style="position:absolute;padding-left: 110px;top: 35px"> <textarea class="textarea" name="textarea" id="textarea" th:text="${admin_remark}" readonly style="width: 400px;height: 100px;border-color: #d4d4d4"></textarea></div>
+</div>
+<div style="position: absolute;bottom: 15px;left: 35%;">
+    <button  class=" label-info" style="background: #2D93CA;color: white;border: none;height: 30px" onclick="closes()" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关闭&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+</div>
+
+
+<script type="text/javascript">
+    function closes() {
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.parent.layer.close(index);
+    }
+</script>
+
+</body>
+</html>

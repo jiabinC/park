@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="header">
+<div class="top" id="item4">
+	<div class="container clearfix">
+		<ul class="denglu clearfix fr">
+			<li th:if="${session.LogUser == null}"><a href="/join" style="font-size: 18px" >登录</a></li>
+
+			<li th:if="${session.LogUser != null}">
+				<a id="userN" th:text="${session.LogUser.user_name}"></a>
+			<a th:href="@{/user/logout}">退出登录</a>
+				<a th:href="@{'/user/user-show?user_id='+${session.LogUser.user_id}}" >个人中心</a>
+			</li>
+			<!--<li th:if="${session.LogUser != null}"></li>-->
+		</ul>
+	</div>
+</div>
+
+<div class="header">
+	<div class="container clearfix">
+		<div class="logo fl" style="padding-left: 30px">
+			<a href="/index"><img src="/moban/images/logo.jpg" alt=""/></a>
+		</div>
+		<div class="mm fr clearfix" th:if="${session.LogUser != null && show != '0'}">
+			<a th:href="@{'/car/car-select?user_id='+${session.LogUser.user_id}}">我的车位</a>
+		</div>
+	</div>
+</div>
+</div>
+</html>

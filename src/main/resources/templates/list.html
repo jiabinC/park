@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" th:href="@{/moban/css/index.css}"/>
+	<link rel="stylesheet" th:href="@{/moban/css/table.css}"/>
+	<script th:src="@{/moban/js/jquery-1.7.2.min.js}"></script>
+	<script th:src="@{/moban/js/main.js}"></script>
+	<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+	<title>查询车位</title>
+</head>
+<body >
+
+<span th:replace="/common/head2 :: header"></span>
+
+<div class="list-main">
+	<div class="container" style="height: 630px">
+		<div class="bread" style="margin-bottom: 0;">当前位置：
+			<a href="/index">首页</a> >
+			<a href="#">车位管理</a>
+			<div style="position: absolute; right: 100px ;top: 150px" class="cl pd-5 bg-1 bk-gray mt-20">
+				<span class="l">
+				<a href="javascript:;" style="color: #fff;border: 0;font-size: 18px;outline: none;padding: 5px 10px;background:  #3385ff;border-radius: 4px;" onclick="notice_add('添加车位','/car/carAdd','1800','900')" class="btn btn-primary radius"> 添加车位
+				</a>
+				</span>
+			</div>
+
+		</div>
+		<ul class="select">
+			<li class="select-result">
+				<dl>
+					<dt>筛选条件：</dt>
+					<dd class="select-no">
+						<form action="/car/findCar" method="post" id="findP">
+							&nbsp;&nbsp;&nbsp;&nbsp;<label class="label-info">审核状态</label>&nbsp;&nbsp;
+							<select name="check_status" onchange="selectPark()" class="form-control">
+								<option th:selected="${check_status=='-1'}" value="-1">全部</option>
+								<option th:selected="${check_status=='0'}" value="0">审核中</option>
+								<option th:selected="${check_status=='1'}" value="1">审核通过</option>
+								<option th:selected="${check_status=='2'}" value="2">审核拒绝</option>
+							</select>
+							&nbsp;&nbsp;&nbsp;&nbsp;<label class="label-info">发布状态</label>&nbsp;&nbsp;
+							<select name="publish_status" onchange="selectPark()" class="form-control">
+								<option th:selected="${publish_status=='-1'}" value="-1">全部</option>
+								<option th:selected="${publish_status=='0'}" value="0">未发布</option>
+								<option th:selected="${publish_status=='1'}" value="1">已发布</option>
+							</select>
+						</form>
+					</dd>
+				</dl>
+			</li>
+		</ul>
+		<div  style="padding-right: 17px; padding-left: 20px">
+			<table width="90%" class="table" style="border-bottom-style: none">
+				<caption><h2>我的车位</h2></caption>
+				<thead>
+				<tr style="text-align: center">
+					<th width="110">创建时间</th>
+					<th width="110">车位名称</th>
+					<th width="70">车位所在省份</th>
+					<th width="70">车位所在市/区</th>
+					<th width="140">车位具体地址</th>
+					<th width="100"  >审核状态</th>
+					<th width="100">发布状态</th>
+					<th width="125">操作</th>
+				</tr>
+				</thead>
+			</table>
+		</div>
+				<div  style="overflow-x: auto; overflow-y: scroll; height: 400px; padding-left: 20px">
+					<table width="90%" class="table">
+				<tr th:each="parkList : ${parkList}" >
+						<input type="hidden" th:value="${parkList.park_id}" class="inp"/>
+
+					<td width="110" th:text="${parkList.create_time}"></td>
+					<td width="110" th:text="${parkList.park_name}"></td>
+					<td width="70" th:text="${parkList.park_province}"></td>
+					<td width="70" th:text="${parkList.park_city}"></td>
+					<td width="140" th:text="${parkList.park_location}"></td>
+					<td width="100" style="vertical-align: middle">
+						<span th:if="${parkList.check_status=='审核通过'}" style="background: #00b050;color: white" >&nbsp;&nbsp;审核通过&nbsp;&nbsp;</span>
+						<span th:if="${parkList.check_status=='审核中'}" style="background: #d58512;color: white" >&nbsp;&nbsp;&nbsp;&nbsp;审核中&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						<span th:if="${parkList.check_status=='审核拒绝'}" style="background: #CC0000;color: white" >&nbsp;&nbsp;审核拒绝&nbsp;&nbsp;</span>
+					</td>
+					<td width="100"  style="vertical-align: middle">
+						<span th:if="${parkList.publish_status=='已发布'}" style="background: #00b050;color: white" >&nbsp;&nbsp;&nbsp;&nbsp;已发布&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						<span th:if="${parkList.publish_status=='未发布'}" style="background: #d58512;color: white" >&nbsp;&nbsp;&nbsp;&nbsp;未发布&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					</td>
+					<td width="40"  style="vertical-align: middle">
+						<button class="btn" th:if="${parkList.check_status == '审核通过' || parkList.check_status == '审核拒绝'}" onclick="show_remark(this,'管理员审批备注','/car/show_adminRemark','600','350')"> 审批备注</button>
+						<button class="btn" th:if="${parkList.check_status == '审核通过'&& parkList.publish_status =='未发布'}"> &nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</button>
+						<button class="btn" th:if="${parkList.check_status == '审核拒绝'}">重新提交审核</button>
+						<button class="btn" th:if="${parkList.check_status == '审核中'}"> 审核中不可操作</button>
+
+
+					</td>
+
+				</tr>
+					</table>
+		       </div>
+
+
+
+
+	</div>
+</div>
+
+<style type="text/css">
+	.btn {
+
+		display: inline-flex; justify-content: right; align-items: center; text-decoration: none; /*for <a> link*/  border: 1px solid transparent; border-radius: 5px;  color: #fff; background-color: #00C09E;
+
+	}
+	.btn:focus, .btn:active { outline: none 0; transform: translateY(1px); filter: saturate(150%); } .btn:hover { color: #0f0f0f; border-color: currentColor; background: white; }
+
+
+	table
+	{
+		border-collapse: collapse;
+
+		text-align: center;
+		vertical-align: middle;
+	}
+	table td, table th
+	{
+		border: 1px solid #cad9ea;
+		color: #666;
+		height: 30px;
+
+	}
+	table thead th
+	{
+		background-color: #CCE8EB;
+		text-align: center;
+		font-size: 17px;
+
+	}
+	table tr:nth-child(odd)
+	{
+		background: #fff;
+	}
+	table tr:nth-child(even)
+	{
+		background: #F5FAFA;
+	}
+</style>
+
+<span th:replace="/common/foot :: footer"></span>
+<script type="text/javascript">
+function selectPark(){
+	$("#findP").submit();
+}
+</script>
+<!-- 引入公共js -->
+<span th:include="/common/on-load-js :: commonOnLoadJs"></span>
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+    function notice_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+    function show_remark(obj,title,url,w,h) {
+        var parkId = $(obj).parents("tr").find(".inp").val();
+        var urltmp = url+"?park_id="+parkId;
+        layer_show(title,urltmp,w,h);
+
+    }
+
+    function notice_edit(obj,title,url,w,h){
+        var noticeId = $(obj).parents("tr").find(".inp").val();
+        var urltmp = url+"?noticeId="+noticeId;
+        layer_show(title,urltmp,w,h);
+    }
+
+    function notice_del(obj){
+        layer.confirm('确认要删除吗？',function(index){
+            var noticeId = $(obj).parents("tr").find(".inp").val();
+            $.ajax({
+                type: 'POST',
+                url: '/admin/delNotice',
+                data:{"noticeId":noticeId},
+                dataType: 'json',
+                success: function(data){
+                    if(data.res==0){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',{icon:1,time:1000});
+                    }else{
+                        layer.msg('操作失败!',{icon: 2,time:1000});
+                    }
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>
